@@ -3,6 +3,7 @@ package com.perniktv.serverjam.data;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -11,9 +12,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import com.perniktv.serverjam.Main;
 import com.perniktv.serverjam.utils.DifficultyType;
+import com.perniktv.serverjam.utils.SchematicLoader;
 
 public class PlayerData {
 	private UUID uuid;
@@ -36,6 +39,10 @@ public class PlayerData {
 
 	public UUID getUniqueId() {
 		return this.uuid;
+	}
+
+	public boolean isOnline() {
+		return getOfflinePlayer().isOnline();
 	}
 
 	public String getName() {
@@ -114,6 +121,10 @@ public class PlayerData {
 		}
 	}
 
+	public boolean isFriend(UUID friend) {
+		return this.friends.contains(friend);
+	}
+
 	public boolean addFriend(UUID friend) {
 		if (friends.contains(friend)) {
 			return false;
@@ -186,6 +197,31 @@ public class PlayerData {
 		this.campLocation = campLocation.clone();
 	}
 
+	public List<ItemStats> getItemStats() {
+		List<ItemStats> stats = new ArrayList<ItemStats>();
+		if (!isOnline()) {
+			return stats;
+		}
+
+		ItemStack helmet = getPlayer().getInventory().getHelmet();
+		ItemStack chestplate = getPlayer().getInventory().getChestplate();
+		ItemStack leggings = getPlayer().getInventory().getLeggings();
+		ItemStack boots = getPlayer().getInventory().getBoots();
+
+		ItemStack mainItem = getPlayer().getInventory().getItemInMainHand();
+		ItemStack offItem = getPlayer().getInventory().getItemInOffHand();
+
+		stats.add(new ItemStats(helmet));
+		stats.add(new ItemStats(chestplate));
+		stats.add(new ItemStats(leggings));
+		stats.add(new ItemStats(boots));
+		stats.add(new ItemStats(mainItem));
+		stats.add(new ItemStats(offItem));
+
+		return stats;
+
+	}
+
 	private void init(OfflinePlayer player) {
 		this.power = 1;
 		this.exp = 0;
@@ -251,14 +287,7 @@ public class PlayerData {
 
 		ConfigurationSection camps = Main.getPlugin().getConfig().getConfigurationSection("camps");
 		if (!camps.contains(this.uuid.toString())) {
-			camps.set(this.uuid.toString() + "." + "world", "");
-			camps.set(this.uuid.toString() + "." + "x", 0);
-			camps.set(this.uuid.toString() + "." + "y", 0);
-			camps.set(this.uuid.toString() + "." + "z", 0);
-			camps.set(this.uuid.toString() + "." + "yaw", 0);
-			camps.set(this.uuid.toString() + "." + "pitch", 0);
-
-			Main.getPlugin().saveConfig();
+			createCamp();
 			return;
 		}
 
@@ -292,7 +321,11 @@ public class PlayerData {
 		players.set(this.uuid.toString() + "." + "runes", this.runes);
 
 		Main.getPlugin().saveConfig();
-		
+
+		if (null == campLocation || null == campLocation.getWorld()) {
+			return;
+		}
+
 		ConfigurationSection camps = Main.getPlugin().getConfig().getConfigurationSection("camps");
 		camps.set(this.uuid.toString() + "." + "world", campLocation.getWorld().getName());
 		camps.set(this.uuid.toString() + "." + "x", campLocation.getX());
@@ -302,5 +335,36 @@ public class PlayerData {
 		camps.set(this.uuid.toString() + "." + "pitch", campLocation.getPitch());
 
 		Main.getPlugin().saveConfig();
+	}
+
+	private void createCamp() {
+		ConfigurationSection campsSection = Main.getPlugin().getConfig().getConfigurationSection("camps");
+		if (null == campsSection) {
+			return;
+		}
+
+		World world = Bukkit.getServer().getWorld(campsSection.getString("settings.world"));
+		int startX = campsSection.getInt("settings.startX"), startY = campsSection.getInt("settings.startY"),
+				startZ = campsSection.getInt("settings.startZ");
+
+		int moveX = campsSection.getInt("settings.moveX"), moveY = campsSection.getInt("settings.moveY"),
+				moveZ = campsSection.getInt("settings.moveZ");
+
+		Set<String> campKeys = campsSection.getKeys(false);
+		if (campKeys.size() > 1) {
+			String lastCampUUID = (String) campKeys.toArray()[campKeys.size() - 1];
+			Bukkit.broadcastMessage(lastCampUUID);
+			startX += campsSection.getInt(lastCampUUID + ".x");
+			startZ += campsSection.getInt(lastCampUUID + ".z");
+			startX += moveX;
+			startY += moveY;
+			startZ += moveZ;
+		}
+		Location start = new Location(world, startX, startY, startZ);
+
+		if (SchematicLoader.loadSchematic(world, start, campsSection.getString("settings.schem"))) {
+			setCampLocation(start);
+			save();
+		}
 	}
 }

@@ -1,8 +1,11 @@
 package com.perniktv.serverjam.data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class ItemStats {
 	private int power;
@@ -12,14 +15,63 @@ public class ItemStats {
 	private int critChance;
 	private List<ItemAbility> itemAbilities;
 
+	public ItemStats(ItemStack item) {
+		init();
+		if (!item.hasItemMeta()) {
+			return;
+		}
+		ItemMeta meta = item.getItemMeta();
+		if (!meta.hasLore()) {
+			return;
+		}
+		this.deserialize(meta.getLore());
+	}
+
 	public ItemStats(List<String> lore) {
-		this.power = -1;
-		this.minDamage = -1;
-		this.maxDamage = -1;
-		this.critDamage = -1;
-		this.critChance = -1;
+		init();
+		this.deserialize(lore);
+	}
+
+	public void init() {
+		this.power = 0;
+		this.minDamage = 0;
+		this.maxDamage = 0;
+		this.critDamage = 0;
+		this.critChance = 0;
 		this.itemAbilities = null;
-		
+	}
+
+	public List<String> serialize() {
+		List<String> lore = new ArrayList<String>();
+
+		if (0 != this.power) {
+			lore.add("Power" + ": " + this.power);
+		}
+		if (0 != this.minDamage) {
+			lore.add("Min Damage" + ": " + this.minDamage);
+		}
+		if (0 != this.maxDamage) {
+			lore.add("Max Damage" + ": " + this.maxDamage);
+		}
+		if (0 != this.critDamage) {
+			lore.add("Crit Damage" + ": " + this.critDamage);
+		}
+		if (0 != this.critChance) {
+			lore.add("Crit Chance" + ": " + this.critChance + "%");
+		}
+		if (null != this.itemAbilities) {
+
+		}
+
+		return lore;
+
+	}
+
+	public void deserialize(List<String> lore) {
+		if (null == lore) {
+			return;
+		}
+
 		for (String line : lore) {
 			line = ChatColor.stripColor(line);
 			if (!line.contains(":")) {
@@ -38,7 +90,7 @@ public class ItemStats {
 			} else if ("Crit Damage".equals(stat[0])) {
 				this.critDamage = Integer.parseInt(stat[1].trim());
 			} else if ("Crit Chance".equals(stat[0])) {
-				this.critChance = Integer.parseInt(stat[1].trim());
+				this.critChance = Integer.parseInt(stat[1].trim().replace("%", ""));
 			}
 		}
 	}

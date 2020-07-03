@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.perniktv.serverjam.commands.CampCommand;
 import com.perniktv.serverjam.commands.CommandManager;
+import com.perniktv.serverjam.events.ConnectionsEvents;
 import com.perniktv.serverjam.events.NoAchievements;
 import com.perniktv.serverjam.managers.ItemDataManager;
 import com.perniktv.serverjam.managers.PlayerDataManager;
@@ -46,6 +47,7 @@ public class Main extends JavaPlugin {
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new NoAchievements(), this);
+		pm.registerEvents(new ConnectionsEvents(), this);
 	}
 
 	private void loadManagers() {

@@ -83,6 +83,6 @@ public class CommandManager {
         }
 
         sender.sendMessage(ChatColor.RED + "Unknown command. Please use 'help' to find the command you were looking for.");
-        return false;
-    }
+		return false;
+	}
 }

@@ -25,6 +25,19 @@ public class PlayerDataManager extends Manager {
 			Main.getPlugin().getConfig().createSection("players");
 			Main.getPlugin().saveConfig();
 		}
+		
+		if (!Main.getPlugin().getConfig().contains("camps")) {
+			Main.getPlugin().getConfig().createSection("camps");
+			Main.getPlugin().getConfig().set("camps.settings.schem", "camp.schem");
+			Main.getPlugin().getConfig().set("camps.settings.world", "camps");
+			Main.getPlugin().getConfig().set("camps.settings.startX", 0);
+			Main.getPlugin().getConfig().set("camps.settings.startY", 95);
+			Main.getPlugin().getConfig().set("camps.settings.startZ", 0);
+			Main.getPlugin().getConfig().set("camps.settings.moveX", 1000);
+			Main.getPlugin().getConfig().set("camps.settings.moveY", 0);
+			Main.getPlugin().getConfig().set("camps.settings.moveZ", 1000);
+			Main.getPlugin().saveConfig();
+		}
 
 		ConfigurationSection players = Main.getPlugin().getConfig().getConfigurationSection("players");
 

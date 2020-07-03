@@ -16,7 +16,7 @@ public class ItemDataManager extends Manager {
 	@Override
 	public void init() {
 		this.items = new ArrayList<ItemData>();
-		File itemsDirectory = new File(Main.getPlugin().getDataFolder() + File.pathSeparator + "items");
+		File itemsDirectory = new File(Main.getPlugin().getDataFolder() + "/items");
 		if (!itemsDirectory.exists()) {
 			itemsDirectory.mkdirs();
 		}
