@@ -2,6 +2,9 @@ package com.perniktv.serverjam;
 
 import java.util.logging.Logger;
 
+import com.perniktv.serverjam.events.ConnectionsEvents;
+import com.perniktv.serverjam.managers.ItemDataManager;
+import com.perniktv.serverjam.managers.PlayerDataManager;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.command.Command;
@@ -21,7 +24,12 @@ public class Main extends JavaPlugin {
 		plugin = this;
 		registerCommands();
 		registerEvents();
+		registerManagers();
 		super.onEnable();
+	}
+
+	private void registerManagers() {
+		PlayerDataManager.getInstance().init();
 	}
 
 	@Override
@@ -37,6 +45,7 @@ public class Main extends JavaPlugin {
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new NoAchievements(), this);
+		pm.registerEvents(new ConnectionsEvents(), this);
 	}
 
 	public void loadConfig() {
