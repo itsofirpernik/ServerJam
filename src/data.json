@@ -1,31 +1,37 @@
 
-{player-uuid}.yaml
+/plugins/ServerJam/config.yaml
 {
-	"uuid": "{player-uuid}",
-	"level": {level},
-	"friends": ["{friend1-uuid}", "{friend2-uuid}", "{friend3-uuid}"]
-	"maps": {
-		"{map1}": ["default"],
-		"{map2}": ["default", "adventure"],
-		"{map3}": ["default", "adventure", "apocalypse"],
-		"{map4}": ["default", "apocalypse"],
+	uuid: "{player-uuid}"
+	name: "{name}"
+	level: {level}
+	exp: {exp}
+	coins: {coins}
+	friends: ["{friend1-uuid}", "{friend2-uuid}", "{friend3-uuid}"]
+	maps: {
+		{map1}: ["default"],
+		{map2}: ["default", "adventure"],
+		{map3}: ["default", "adventure", "apocalypse"],
+		{map4}: ["default", "apocalypse"],
 	}
-	"runes": ["rune-map", "rune-map2"]
+	runes: ["rune-map", "rune-map2"]
+}
+
+/plugins/ServerJam/camps/{player-uuid}-camp.yaml
+{
+	world: {world-name}
+	x: {x}
+	y: {y}
+	z: {z}
 }
 
 
-{player-uuid}-camp.yaml
+/plugins/ServerJam/items/{item}.yaml
 {
-	"world": "{world-name}",
-	"x": "{x}",
-	"y": "{y}",
-	"z": "{z}"
-}
-
-
-{item}.yaml
-{
-	"material": "{material}",
-	"
-
+	material: "{material}"
+	displayname: "{displayname}"
+	lore:
+		0: "----"
+		1: "----"
+		2: "----"
+		3: "----"
 }
