@@ -17,7 +17,7 @@ import com.perniktv.serverjam.utils.DifficultyType;
 
 public class PlayerData {
 	private UUID uuid;
-	private int level;
+	private int power;
 	private int exp;
 	private int coins;
 	private List<UUID> friends;
@@ -55,8 +55,8 @@ public class PlayerData {
 		return Bukkit.getPlayer(this.uuid);
 	}
 
-	public int getLevel() {
-		return this.level;
+	public int getPower() {
+		return this.power;
 	}
 
 	public int getExp() {
@@ -83,8 +83,8 @@ public class PlayerData {
 		return this.campLocation;
 	}
 
-	public void setLevel(int level) {
-		this.level = level;
+	public void setPower(int power) {
+		this.power = power;
 	}
 
 	public void setExp(int exp) {
@@ -187,7 +187,7 @@ public class PlayerData {
 	}
 
 	private void init(OfflinePlayer player) {
-		this.level = 1;
+		this.power = 1;
 		this.exp = 0;
 		this.coins = 0;
 		this.friends = new ArrayList<UUID>();
@@ -203,7 +203,7 @@ public class PlayerData {
 		ConfigurationSection players = Main.getPlugin().getConfig().getConfigurationSection("players");
 		if (!players.contains(this.uuid.toString().toString())) {
 			players.set(this.uuid.toString() + "." + "name", player.getName());
-			players.set(this.uuid.toString() + "." + "level", this.level);
+			players.set(this.uuid.toString() + "." + "power", this.power);
 			players.set(this.uuid.toString() + "." + "exp", this.exp);
 			players.set(this.uuid.toString() + "." + "coins", this.coins);
 			players.set(this.uuid.toString() + "." + "friends", null);
@@ -216,7 +216,7 @@ public class PlayerData {
 
 		ConfigurationSection playerSection = players.getConfigurationSection(this.uuid.toString());
 
-		this.level = playerSection.getInt("level");
+		this.power = playerSection.getInt("power");
 		this.exp = playerSection.getInt("exp");
 		this.coins = playerSection.getInt("coins");
 		if (playerSection.contains("friends")) {
@@ -281,7 +281,7 @@ public class PlayerData {
 
 		ConfigurationSection players = Main.getPlugin().getConfig().getConfigurationSection("players");
 		players.set(this.uuid.toString() + "." + "name", this.getName());
-		players.set(this.uuid.toString() + "." + "level", this.level);
+		players.set(this.uuid.toString() + "." + "power", this.power);
 		players.set(this.uuid.toString() + "." + "exp", this.exp);
 		players.set(this.uuid.toString() + "." + "coins", this.coins);
 		players.set(this.uuid.toString() + "." + "friends", this.friends);

@@ -86,9 +86,32 @@ public class ItemData {
 		if (null != this.lore) {
 			itemMeta.setLore(lore);
 		}
-		
+
 		item.setItemMeta(itemMeta);
 		return item;
+	}
+	
+	public ItemStats getItemStats() {
+		return new ItemStats(this.lore);
+	}
+
+	public void save() {
+		File itemFile = getItemFile();
+
+		if (null == itemFile) {
+			return;
+		}
+
+		YamlConfiguration itemConfig = YamlConfiguration.loadConfiguration(itemFile);
+		itemConfig.set("material", this.material.toString());
+		itemConfig.set("displayname", this.displayname);
+		itemConfig.set("lore", this.lore);
+		
+		try {
+			itemConfig.save(itemFile);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

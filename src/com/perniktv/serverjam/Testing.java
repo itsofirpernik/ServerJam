@@ -20,6 +20,14 @@ public class Testing {
 		
 		System.out.println(difficulites);
 		
+		String str = "Power: 5";
+
+		String[] stat = str.split(":");
+		if ("Power".equals(stat[0])) {
+			int a = Integer.parseInt(stat[1].trim());
+			System.out.println(a);
+		}
+		
 		// System.out.println(material.toString());
 		// System.out.println(material.getKey().toString());
 	}
