@@ -27,3 +27,4 @@ target/
 ServerJam.iml
 pom.xml
 server/
+resources/
