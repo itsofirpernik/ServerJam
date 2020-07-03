@@ -132,6 +132,8 @@ public class Command {
     public boolean executeHelp(CommandSender commandSender) {
         if (this.usage != null) {
             commandSender.sendMessage(ChatColor.GOLD + "Usage: " + ChatColor.RESET + this.usage);
+        } else {
+            commandSender.sendMessage(ChatColor.RED + "This command has no usage.");
         }
 
         if (!this.subCommands.isEmpty()) {
