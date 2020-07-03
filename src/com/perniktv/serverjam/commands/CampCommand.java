@@ -1,15 +1,13 @@
 package com.perniktv.serverjam.commands;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import com.perniktv.serverjam.commands.annotations.CommandHandler;
+import org.bukkit.entity.Player;
 
-public class CampCommand implements CommandExecutor {
+public class CampCommand {
 
-	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-		
-		return false;
+	@CommandHandler(name="camp")
+	public void camp(Player player, String[] args) {
+		player.sendMessage("Hello world!");
 	}
 
 }
