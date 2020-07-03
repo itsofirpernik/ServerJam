@@ -13,7 +13,7 @@ import com.perniktv.serverjam.data.PlayerData;
 
 public class PlayerDataManager extends Manager {
 
-	private static PlayerDataManager playerDataManager = new PlayerDataManager();
+	private static final PlayerDataManager playerDataManager = new PlayerDataManager();
 
 	private List<PlayerData> players;
 
@@ -82,7 +82,7 @@ public class PlayerDataManager extends Manager {
 
 	}
 
-	public static PlayerDataManager getInstance() {
+	public static final PlayerDataManager getInstance() {
 		return playerDataManager;
 	}
 

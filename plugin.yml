@@ -1,0 +1,8 @@
+name: ServerJam
+version: 0.0.1
+main: com.perniktv.serverjam.Main
+api-version: 1.16
+prefix: ServerJam
+commands:
+ camp:
+  description: "Goto Camp"

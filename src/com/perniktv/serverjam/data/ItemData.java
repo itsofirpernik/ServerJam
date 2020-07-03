@@ -44,6 +44,10 @@ public class ItemData {
 		this.item = generateItem();
 	}
 
+	public String getName() {
+		return name;
+	}
+	
 	public ItemStack getItem() {
 		return item;
 	}

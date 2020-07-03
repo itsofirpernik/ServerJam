@@ -1,31 +1,40 @@
 package com.perniktv.serverjam;
 
-import java.util.logging.Logger;
-
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import com.perniktv.serverjam.commands.CommandManager;
 import com.perniktv.serverjam.commands.CampCommand;
+import com.perniktv.serverjam.commands.CommandManager;
 import com.perniktv.serverjam.events.NoAchievements;
+import com.perniktv.serverjam.managers.ItemDataManager;
+import com.perniktv.serverjam.managers.PlayerDataManager;
 
 public class Main extends JavaPlugin {
 
 	public static Main plugin;
-	private Logger log = Logger.getLogger("minecraft");
 
 	@Override
 	public void onEnable() {
 		plugin = this;
 		registerCommands();
 		registerEvents();
+		loadManagers();
+
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			PlayerDataManager.getInstance().addPlayer(player.getUniqueId());
+		}
+
 		super.onEnable();
 	}
 
 	@Override
 	public void onDisable() {
+		unloadManagers();
+
 		plugin = null;
 		super.onDisable();
 	}
@@ -37,6 +46,16 @@ public class Main extends JavaPlugin {
 	private void registerEvents() {
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvents(new NoAchievements(), this);
+	}
+
+	private void loadManagers() {
+		PlayerDataManager.getInstance().init();
+		ItemDataManager.getInstance().init();
+	}
+
+	private void unloadManagers() {
+		PlayerDataManager.getInstance().teardown();
+		ItemDataManager.getInstance().teardown();
 	}
 
 	public void loadConfig() {

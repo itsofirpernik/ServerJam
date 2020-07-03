@@ -9,8 +9,10 @@ import com.perniktv.serverjam.data.ItemData;
 
 public class ItemDataManager extends Manager {
 	
-	private List<ItemData> items;
+	private static final ItemDataManager instance = new ItemDataManager();
 	
+	private List<ItemData> items;
+
 	@Override
 	public void init() {
 		this.items = new ArrayList<ItemData>();
@@ -18,7 +20,7 @@ public class ItemDataManager extends Manager {
 		if (!itemsDirectory.exists()) {
 			itemsDirectory.mkdirs();
 		}
-		
+
 		for (File file : itemsDirectory.listFiles()) {
 			String filename = file.getName();
 			filename = filename.replace(".yaml", "");
@@ -29,7 +31,23 @@ public class ItemDataManager extends Manager {
 	@Override
 	public void teardown() {
 		// TODO Auto-generated method stub
-		
+		for (ItemData itemData : items) {
+			itemData.save();
+		}
+	}
+
+	public ItemData getItemData(String name) {
+		for (ItemData itemData : items) {
+			if (name.equals(itemData.getName())) {
+				return itemData;
+			}
+		}
+
+		return null;
+	}
+	
+	public static final ItemDataManager getInstance() {
+		return instance;
 	}
 
 }
